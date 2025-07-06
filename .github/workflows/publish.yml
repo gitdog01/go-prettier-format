@@ -51,6 +51,13 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
+      - name: Commit build artifacts
+        run: |
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "build: update build artifacts"
+          fi
+
       - name: Bump version and create tag
         run: |
           npm version patch -m "chore: release v%s"
