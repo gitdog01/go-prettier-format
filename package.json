@@ -2,19 +2,30 @@
   "name": "go-prettier-format",
   "version": "0.1.0",
   "description": "Prettier plugin for Go, powered by WASM.",
-  "main": "src/index.js",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "files": [
-    "src/",
+    "dist",
     "go.wasm"
   ],
   "scripts": {
     "build:wasm": "cd go_src && GOOS=js GOARCH=wasm go build -o ../go.wasm .",
-    "test": "rm -rf test_result && mkdir test_result && cp tests/*.txt test_result/ && npx prettier --plugin ./src/index.js --write --parser go test_result/*.txt"
+    "build:js": "esbuild src/index.js --bundle --platform=node --format=esm --outfile=dist/index.js && esbuild src/index.cjs --bundle --platform=node --format=cjs --outfile=dist/index.cjs",
+    "build": "npm run build:wasm && npm run build:js",
+    "prepublishOnly": "npm run build",
+    "test": "npm run build && rm -rf test_result && mkdir test_result && cp tests/*.txt test_result/ && npx prettier --plugin ./dist/index.cjs --write --parser go test_result/*.txt"
   },
   "engines": {
     "node": ">=16"
   },
-  "author": "",
+  "author": "gitdog01",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -25,6 +36,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "esbuild": "^0.20.0",
     "prettier": "^3.0.0"
   },
   "keywords": [

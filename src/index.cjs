@@ -1,15 +1,7 @@
 "use strict";
 
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-// wasm_exec.js is a file provided by the Go compiler that needs to be
-// loaded to run the WASM file. It creates a `Go` class on the global object.
-import "./wasm_exec.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fs = require("fs");
+const path = require("path");
 
 let initializePromise;
 
@@ -19,6 +11,10 @@ function initialize() {
   }
 
   initializePromise = (async () => {
+    // wasm_exec.js is a file provided by the Go compiler that needs to be
+    // loaded to run the WASM file. It creates a `Go` class on the global object.
+    require("./wasm_exec.js");
+
     const go = new Go();
 
     const wasmPath = path.join(__dirname, "../go.wasm");
@@ -71,4 +67,8 @@ const printers = {
   },
 };
 
-export { languages, parsers, printers }; 
+module.exports = {
+  languages,
+  parsers,
+  printers,
+}; 

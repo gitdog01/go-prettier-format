@@ -1,6 +1,9 @@
 # Prettier Plugin for Go (using WASM)
 
-This is a Prettier plugin for the Go programming language. It formats Go code using the official `go/format` package, which is compiled to WebAssembly (WASM) to run in a Node.js environment.
+[![npm version](https://img.shields.io/npm/v/go-prettier-format.svg)](https://www.npmjs.com/package/go-prettier-format)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This is a [Prettier](https://prettier.io/) v3 plugin for the Go programming language. It formats Go code using the official `go/format` package, which is compiled to WebAssembly (WASM) to run in a Node.js environment.
 
 ## Background
 
@@ -10,7 +13,7 @@ This project was born out of the desire to have a single, unified formatting too
 
 ## Installation
 
-First, install Prettier and this plugin from NPM:
+First, install Prettier (v3 or later) and this plugin from NPM:
 
 ```bash
 npm install --save-dev prettier go-prettier-format
@@ -32,6 +35,8 @@ npx prettier --write your-file.go
 npx prettier --write "**/*.go"
 ```
 
+> Note: For cross-platform compatibility in npm scripts, it's recommended to use single quotes: `'**/*.go'`.
+
 ### package.json Script
 
 For convenience, you can add a script to your `package.json`:
@@ -39,7 +44,7 @@ For convenience, you can add a script to your `package.json`:
 ```json
 {
   "scripts": {
-    "format": "prettier --write \"**/*.go\""
+    "format": "prettier --write '**/*.go'"
   }
 }
 ```
@@ -79,6 +84,7 @@ npm test
 ```
 
 This command will:
+- Build the latest version of the plugin from source.
 - Create a `test_result` directory.
 - Copy the sample files from the `tests/` directory into it.
 - Run the Prettier formatter on the files inside `test_result/`.
@@ -89,11 +95,12 @@ You can then compare the original files in `tests/` with the formatted files in 
 
 ## Publishing to NPM
 
-To publish a new version to NPM:
+This package is configured to build automatically before publishing.
 
-1.  Build the latest WASM binary: `npm run build:wasm`.
-2.  Update the version number in `package.json`.
-3.  Run `npm publish`.
+1.  Update the version number in `package.json` using `npm version <patch|minor|major>`.
+2.  Run `npm publish`.
+
+The `prepublishOnly` script will handle building the Wasm and JavaScript bundles before the package is uploaded to the registry.
 
 ## How it Works
 
