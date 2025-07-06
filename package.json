@@ -1,0 +1,30 @@
+{
+  "name": "prettier-plugin-go",
+  "version": "0.1.0",
+  "description": "Prettier plugin for Go, powered by WASM.",
+  "main": "src/index.js",
+  "files": [
+    "src/",
+    "go.wasm"
+  ],
+  "scripts": {
+    "build:wasm": "cd go_src && GOOS=js GOARCH=wasm go build -o ../go.wasm .",
+    "test": "npx prettier --plugin ./src/index.js --write tests/fixture.go"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  },
+  "keywords": [
+    "prettier",
+    "prettier-plugin",
+    "go",
+    "golang",
+    "formatter"
+  ]
+}
