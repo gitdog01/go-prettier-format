@@ -13,7 +13,7 @@ This project was born out of the desire to have a single, unified formatting too
 First, install Prettier and this plugin from NPM:
 
 ```bash
-npm install --save-dev prettier prettier-plugin-go
+npm install --save-dev prettier go-prettier-format
 ```
 
 The plugin comes with a pre-compiled WASM module, so you don't need to have Go installed on your machine to use it.
@@ -58,8 +58,8 @@ You will need to have Go installed on your machine to build the WASM module from
 
 1.  Clone the repository and install dependencies:
     ```bash
-    git clone https://github.com/gitdog01/prettier-plugin-go.git
-    cd prettier-plugin-go
+    git clone https://github.com/gitdog01/go-prettier-format.git
+    cd go-prettier-format
     npm install
     ```
 

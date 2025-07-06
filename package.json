@@ -1,5 +1,5 @@
 {
-  "name": "prettier-plugin-go",
+  "name": "go-prettier-format",
   "version": "0.1.0",
   "description": "Prettier plugin for Go, powered by WASM.",
   "main": "src/index.js",
@@ -18,10 +18,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gitdog01/prettier-plugin-go.git"
+    "url": "https://github.com/gitdog01/go-prettier-format.git"
   },
   "bugs": {
-    "url": "https://github.com/gitdog01/prettier-plugin-go/issues"
+    "url": "https://github.com/gitdog01/go-prettier-format/issues"
   },
   "dependencies": {},
   "devDependencies": {
