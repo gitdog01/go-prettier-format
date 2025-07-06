@@ -1,4 +1,4 @@
-name: Publish to npm
+name: Build and Publish
 
 on:
   push:
@@ -6,19 +6,25 @@ on:
       - main
 
 jobs:
-  publish:
-    # Prevent infinite loop from version bump commits
-    if: !startsWith(github.event.head_commit.message, 'chore: release')
+  build-and-publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Needed to push the new version commit and tag
-
+      contents: write
+      
     steps:
+      - name: Check for release commit
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" == *"chore: release"* ]]; then
+            echo "Release commit detected. Skipping publish to prevent infinite loop."
+            exit 0
+          fi
+          echo "Proceeding with build and publish..."
+
       - name: Checkout repository
         uses: actions/checkout@v4
-        # Fetch all history to enable correct version bumping
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -34,18 +40,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build project
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
       - name: Configure Git
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Bump version and publish
+      - name: Bump version and create tag
         run: |
-          # Create a new version, commit, and tag
-          npm version patch -m "chore: release %s"
-          # Push the changes back to the repository
+          npm version patch -m "chore: release v%s"
           git push --follow-tags
-          # Publish to npm
-          npm publish
+
+      - name: Publish to npm
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 
