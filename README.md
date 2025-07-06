@@ -59,7 +59,9 @@ Interested in contributing? Here's how to get set up for development.
 
 ### Development Setup
 
-You will need to have Go installed on your machine to build the WASM module from the source.
+#### Option 1: Local Development (Requires Go + Node.js)
+
+You will need to have Go (1.21+) and Node.js (18+) installed on your machine.
 
 1.  Clone the repository and install dependencies:
     ```bash
@@ -72,6 +74,51 @@ You will need to have Go installed on your machine to build the WASM module from
     ```bash
     npm run build:wasm
     ```
+
+#### Option 2: Docker Development (No Local Go/Node.js Required)
+
+If you prefer not to install Go and Node.js locally, you can use Docker:
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/gitdog01/go-prettier-format.git
+    cd go-prettier-format
+    ```
+
+2.  Build using Docker:
+    ```bash
+    # Build the project
+    docker build -t go-prettier-format .
+    
+    # Run tests
+    docker run --rm go-prettier-format
+    
+    # Extract built artifacts (optional)
+    docker run --rm -v $(pwd):/output go-prettier-format sh -c "cp go.wasm /output/ && cp -r dist /output/"
+    ```
+
+3.  Development with Docker Compose (recommended):
+    ```bash
+    # Build the project
+    docker-compose run --rm build
+    
+    # Run tests
+    docker-compose run --rm test
+    
+    # Development mode (build + test)
+    docker-compose run --rm dev
+    ```
+
+### Docker Quick Start
+
+If you just want to try the plugin without installing Go or Node.js:
+
+```bash
+# Clone and test
+git clone https://github.com/gitdog01/go-prettier-format.git
+cd go-prettier-format
+docker-compose run --rm test
+```
 
 ### Testing the Plugin
 

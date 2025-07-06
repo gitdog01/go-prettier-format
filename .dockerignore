@@ -1,0 +1,9 @@
+node_modules
+dist
+go.wasm
+test_result
+.git
+.github
+*.md
+.gitignore
+.dockerignore 

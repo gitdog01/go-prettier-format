@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./test_result:/app/test_result
+    command: npm run build
+    
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./test_result:/app/test_result
+    command: npm test
+    depends_on:
+      - build
+      
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run build && npm test"
+    working_dir: /app 
