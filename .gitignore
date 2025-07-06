@@ -1,0 +1,11 @@
+# Dependencies
+/node_modules
+
+# Build artifacts
+/go.wasm
+
+# Test results
+/test_result
+
+# macOS
+.DS_Store 

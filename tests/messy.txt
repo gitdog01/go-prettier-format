@@ -1,0 +1,14 @@
+package    main
+import "fmt"
+func
+main(  ) {
+	fmt.Println(
+		"This is a messy file"	)
+
+	var a = 1
+	var b =2
+
+	if (a < b){
+		fmt.Println("a is less than b")
+	}
+}

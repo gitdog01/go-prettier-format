@@ -9,13 +9,20 @@
   ],
   "scripts": {
     "build:wasm": "cd go_src && GOOS=js GOARCH=wasm go build -o ../go.wasm .",
-    "test": "npx prettier --plugin ./src/index.js --write tests/fixture.go"
+    "test": "rm -rf test_result && mkdir test_result && cp tests/*.txt test_result/ && npx prettier --plugin ./src/index.js --write --parser go test_result/*.txt"
   },
   "engines": {
     "node": ">=16"
   },
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gitdog01/prettier-plugin-go.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gitdog01/prettier-plugin-go/issues"
+  },
   "dependencies": {},
   "devDependencies": {
     "prettier": "^3.0.0"
