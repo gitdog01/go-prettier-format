@@ -1,3 +1,3 @@
-module prettier-plugin-go/internal
+module go-prettier-format/internal
 
 go 1.22.2
