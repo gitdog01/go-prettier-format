@@ -613,15 +613,45 @@ var languages = [
 ];
 var parsers = {
   go: {
+    /**
+     * Parse Go source code. For this plugin, we pass through the text as-is
+     * since the actual formatting is handled by the Go WASM module.
+     * 
+     * @param {string} text - The Go source code to parse
+     * @returns {string} The input text unchanged
+     */
     parse: (text) => text,
     astFormat: "go-format",
     // These are required for Prettier to work
+    /**
+     * Get the start location of a node in the source code.
+     * 
+     * @param {string} node - The node (in this case, the source text)
+     * @returns {number} Always returns 0 as we treat the entire text as one node
+     */
     locStart: (node) => 0,
+    /**
+     * Get the end location of a node in the source code.
+     * 
+     * @param {string} node - The node (in this case, the source text)
+     * @returns {number} The length of the text
+     */
     locEnd: (node) => node.length
   }
 };
 var printers = {
   "go-format": {
+    /**
+     * Format Go source code using the WebAssembly Go formatter.
+     * This function initializes the WASM module if needed and calls the
+     * global formatGo function exposed by the Go program.
+     * 
+     * @async
+     * @param {Object} path - Prettier's path object containing the source code
+     * @param {Function} path.getValue - Function to get the current node value
+     * @returns {Promise<string>} The formatted Go source code
+     * @throws {Error} If the WASM module fails to initialize or format the code
+     */
     print: async (path2) => {
       await initialize();
       const text = path2.getValue();
