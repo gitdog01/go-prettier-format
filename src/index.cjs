@@ -16,13 +16,14 @@ let initializePromise;
 /**
  * Initializes the Go WebAssembly module for formatting Go code.
  * This function sets up the WASM runtime and makes the formatGo function
- * available on the global object.
+ * available on the global object. go.wasm 파일이 존재하지 않거나 읽을 수 없을 때
+ * 명확한 오류를 발생시킵니다.
  * 
  * @async
  * @function initialize
  * @returns {Promise<void>} A promise that resolves when the WASM module is ready
- * @throws {Error} If the WASM file cannot be loaded or instantiated
- */
+ * @throws {Error} go.wasm 파일을 찾거나 초기화하는 데 실패한 경우
+*/
 function initialize() {
   if (initializePromise) {
     return initializePromise;
@@ -36,12 +37,34 @@ function initialize() {
     const go = new Go();
 
     const wasmPath = path.join(__dirname, "../go.wasm");
-    const wasmBuffer = fs.readFileSync(wasmPath);
 
-    const { instance } = await WebAssembly.instantiate(
-      wasmBuffer,
-      go.importObject
-    );
+    // go.wasm 파일 존재 여부 확인
+    if (!fs.existsSync(wasmPath)) {
+      throw new Error(
+        "go.wasm 파일을 찾을 수 없습니다. 'npm run build:wasm' 명령으로 생성하세요."
+      );
+    }
+
+    let wasmBuffer;
+    try {
+      wasmBuffer = fs.readFileSync(wasmPath);
+    } catch (err) {
+      throw new Error(
+        `go.wasm 파일을 읽는 중 오류가 발생했습니다: ${err.message}`
+      );
+    }
+
+    let instance;
+    try {
+      ({ instance } = await WebAssembly.instantiate(
+        wasmBuffer,
+        go.importObject
+      ));
+    } catch (err) {
+      throw new Error(
+        `go.wasm 모듈 초기화에 실패했습니다: ${err.message}`
+      );
+    }
 
     // go.run returns a promise that resolves when the go program exits.
     // Since our program is a long-running service (it exposes a function and waits),
